@@ -8,6 +8,7 @@
 [![Type Checking](https://img.shields.io/badge/Mypy-Strict%20Passed-blue.svg)](https://mypy-lang.org/)
 [![Author](https://img.shields.io/badge/Author-Eng%20Ahmed%20El--khatib-0B1F3A.svg)](https://github.com/ahmed-el5hatib)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/ahmed-el5hatib/CPU-Scheduling-Simulator?color=1E6FBA&logo=github)](https://github.com/ahmed-el5hatib/CPU-Scheduling-Simulator/releases/latest)
 
 > **Author:** Eng Ahmed El-khatib  
 > **Architecture:** Production-Quality Desktop Application (Python 3.11+ / PySide6 / Matplotlib)  
@@ -263,7 +264,8 @@ python src/main.py
 
 A standalone, zero-dependency Windows executable is available for direct execution (no Python installation required):
 
-- **Location:** [`dist/CPUSchedulingSimulator.exe`](dist/CPUSchedulingSimulator.exe)
+- 📥 **Direct Download:** [**Download CPUSchedulingSimulator.exe (v1.0.0)**](https://github.com/ahmed-el5hatib/CPU-Scheduling-Simulator/releases/download/v1.0.0/CPUSchedulingSimulator.exe)
+- **Local Path:** [`dist/CPUSchedulingSimulator.exe`](dist/CPUSchedulingSimulator.exe)
 - **Direct Run:** Double-click `CPUSchedulingSimulator.exe` or execute via terminal:
   ```powershell
   .\dist\CPUSchedulingSimulator.exe
@@ -273,6 +275,7 @@ To rebuild the executable locally from source:
 ```powershell
 pyinstaller CPUSchedulingSimulator.spec --noconfirm
 ```
+
 
 ---
 
