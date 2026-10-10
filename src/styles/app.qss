@@ -1,0 +1,229 @@
+/* CPU Scheduling Simulator - Production QSS Theme
+   Author signature: Eng Ahmed El-khatib
+*/
+
+QMainWindow, QWidget#centralWidget {
+    background-color: #F4F7FB;
+    color: #1E293B;
+    font-family: "Segoe UI";
+}
+
+/* Header Container */
+QFrame#headerFrame {
+    background-color: #0B1F3A;
+    border-bottom: 2px solid #1E6FBA;
+    padding: 10px 20px;
+}
+
+QLabel#headerTitle {
+    color: #FFFFFF;
+    font-size: 18pt;
+    font-weight: 700;
+}
+
+QLabel#headerSubtitle {
+    color: #17A2A2;
+    font-size: 11pt;
+    font-weight: 500;
+}
+
+/* Sidebar Navigation */
+QFrame#sidebarFrame {
+    background-color: #0B1F3A;
+    border-right: 1px solid #1A365D;
+    min-width: 220px;
+    max-width: 240px;
+}
+
+QPushButton.navBtn {
+    background-color: transparent;
+    color: #CBD5E1;
+    font-size: 11pt;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 18px;
+    border: none;
+    border-left: 4px solid transparent;
+    border-radius: 0px;
+}
+
+QPushButton.navBtn:hover {
+    background-color: #132D52;
+    color: #FFFFFF;
+}
+
+QPushButton.navBtn:checked, QPushButton.navBtn.active {
+    background-color: #183B68;
+    color: #FFFFFF;
+    border-left: 4px solid #17A2A2;
+}
+
+/* Footer Container */
+QFrame#footerFrame {
+    background-color: #0B1F3A;
+    border-top: 1px solid #1A365D;
+    padding: 6px 20px;
+    min-height: 28px;
+}
+
+QLabel#footerLabel {
+    color: #94A3B8;
+    font-size: 10pt;
+    font-weight: 500;
+}
+
+QLabel#footerAuthor {
+    color: #17A2A2;
+    font-size: 10pt;
+    font-weight: 700;
+}
+
+/* Card Containers */
+QFrame.cardFrame {
+    background-color: #FFFFFF;
+    border: 1px solid #D9E2EC;
+    border-radius: 8px;
+}
+
+QLabel.cardTitle {
+    color: #0B1F3A;
+    font-size: 14pt;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+QLabel.sectionTitle {
+    color: #0B1F3A;
+    font-size: 12pt;
+    font-weight: 600;
+}
+
+/* Standard Buttons */
+QPushButton.primaryBtn {
+    background-color: #1E6FBA;
+    color: #FFFFFF;
+    font-size: 11pt;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+}
+
+QPushButton.primaryBtn:hover {
+    background-color: #155997;
+}
+
+QPushButton.primaryBtn:pressed {
+    background-color: #0E3E6B;
+}
+
+QPushButton.primaryBtn:disabled {
+    background-color: #94A3B8;
+}
+
+QPushButton.secondaryBtn {
+    background-color: #F8FAFC;
+    color: #1E293B;
+    font-size: 11pt;
+    font-weight: 600;
+    padding: 7px 16px;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+}
+
+QPushButton.secondaryBtn:hover {
+    background-color: #EDF2F7;
+    border-color: #94A3B8;
+}
+
+QPushButton.dangerBtn {
+    background-color: #C0392B;
+    color: #FFFFFF;
+    font-size: 11pt;
+    font-weight: 600;
+    padding: 7px 16px;
+    border: none;
+    border-radius: 6px;
+}
+
+QPushButton.dangerBtn:hover {
+    background-color: #992D22;
+}
+
+QPushButton.tealBtn {
+    background-color: #17A2A2;
+    color: #FFFFFF;
+    font-size: 11pt;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+}
+
+QPushButton.tealBtn:hover {
+    background-color: #128282;
+}
+
+/* Form Controls */
+QLineEdit, QSpinBox, QComboBox {
+    background-color: #FFFFFF;
+    color: #0F172A;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11pt;
+}
+
+QLineEdit:focus, QSpinBox:focus, QComboBox:focus {
+    border: 2px solid #1E6FBA;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    selection-background-color: #E2E8F0;
+    selection-color: #0B1F3A;
+    color: #0F172A;
+}
+
+/* Tables */
+QTableWidget, QTableView {
+    background-color: #FFFFFF;
+    color: #1E293B;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    gridline-color: #EDF2F7;
+    font-size: 10pt;
+    selection-background-color: #E0E7FF;
+    selection-color: #0B1F3A;
+}
+
+QHeaderView::section {
+    background-color: #0B1F3A;
+    color: #FFFFFF;
+    font-size: 10pt;
+    font-weight: 700;
+    padding: 8px;
+    border: none;
+    border-right: 1px solid #1A365D;
+}
+
+QTableWidget::item {
+    padding: 6px;
+}
+
+QTableWidget::item:alternate {
+    background-color: #F8FAFC;
+}
+
+/* Status Bar */
+QStatusBar {
+    background-color: #0B1F3A;
+    color: #CBD5E1;
+    font-size: 9pt;
+}
