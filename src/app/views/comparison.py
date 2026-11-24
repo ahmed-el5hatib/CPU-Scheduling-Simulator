@@ -5,6 +5,7 @@ Author signature: Eng Ahmed El-khatib
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from PySide6.QtCore import Qt
@@ -16,6 +17,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QHeaderView,
     QLabel,
+    QMessageBox,
     QPushButton,
     QScrollArea,
     QSpinBox,
@@ -29,6 +31,8 @@ from scheduling.engine import ALGORITHMS, run_simulation
 from scheduling.models import Process, SimResult
 from storage.export import export_comparison_to_csv
 from visualization.comparison_charts import ComparisonChartsWidget
+
+logger = logging.getLogger(__name__)
 
 
 class ComparisonView(QWidget):
@@ -89,6 +93,14 @@ class ComparisonView(QWidget):
         tb_layout.addWidget(self.btn_export_csv)
 
         main_layout.addWidget(toolbar)
+
+        self.lbl_status = QLabel()
+        self.lbl_status.setWordWrap(True)
+        self.lbl_status.setStyleSheet("color: #9A3412; padding: 6px;")
+        self.lbl_status.hide()
+        main_layout.addWidget(self.lbl_status)
+        self.btn_export_chart.setEnabled(False)
+        self.btn_export_csv.setEnabled(False)
 
         # Scrollable content area
         scroll = QScrollArea()
@@ -194,36 +206,54 @@ class ComparisonView(QWidget):
 
     def set_processes(self, processes: list[Process]) -> None:
         self._processes = list(processes)
-        if self._processes:
-            self.run_comparison()
-        else:
-            self.chart_widget.render_empty_state("No processes to compare. Add processes in Process Manager.")
-            self.table.setRowCount(0)
-            self._update_champions_banner([])
+        self.run_comparison()
+
+    def _clear_results(self) -> None:
+        """Discard results and exports when no valid benchmark is displayed."""
+        self._results = []
+        self.table.setRowCount(0)
+        self._update_champions_banner([])
+        self.btn_export_chart.setEnabled(False)
+        self.btn_export_csv.setEnabled(False)
 
     def run_comparison(self) -> None:
-        """Executes all algorithms against the current workload and updates charts and table."""
+        """Execute all algorithms, reporting failures instead of hiding missing results."""
+        self.lbl_status.clear()
+        self.lbl_status.hide()
+        self._clear_results()
         if not self._processes:
             self.chart_widget.render_empty_state("No processes to compare. Add processes in Process Manager.")
-            self.table.setRowCount(0)
-            self._update_champions_banner([])
             return
 
         q = self.spin_rr_q.value()
         results: list[SimResult] = []
+        failures: list[str] = []
 
-        for key in ALGORITHMS:
-            config: dict[str, Any] = {"quantum": q} if key == "round_robin" else {}
+        for key, info in ALGORITHMS.items():
+            config: dict[str, Any] = {"quantum": q} if info["requires_quantum"] else {}
             try:
                 res = run_simulation(key, self._processes, **config)
                 results.append(res)
             except Exception:
-                pass
+                # A GUI boundary must keep other algorithms usable, but never silently fail.
+                logger.exception("Benchmark failed for algorithm %s", key)
+                failures.append(info["name"])
 
         self._results = results
         self.chart_widget.render_comparison(results)
         self._populate_table(results)
         self._update_champions_banner(results)
+        self.btn_export_chart.setEnabled(bool(results))
+        self.btn_export_csv.setEnabled(bool(results))
+        if failures:
+            prefix = "Partial benchmark" if results else "Benchmark failed"
+            self.lbl_status.setText(
+                f"{prefix}: {len(results)}/{len(ALGORITHMS)} algorithms completed. "
+                f"Failed: {', '.join(failures)}. "
+                "Charts, highlights and exports include successful algorithms only. "
+                "See the application log for error details."
+            )
+            self.lbl_status.show()
 
     def _update_champions_banner(self, results: list[SimResult]) -> None:
         if not results:
@@ -307,6 +337,8 @@ class ComparisonView(QWidget):
                 self.table.setItem(row, col, item)
 
     def _on_export_chart(self) -> None:
+        if not self._results:
+            return
         file_path, _ = QFileDialog.getSaveFileName(
             self,
             "Export Comparison Chart",
@@ -314,7 +346,14 @@ class ComparisonView(QWidget):
             "PNG Image (*.png);;PDF Document (*.pdf);;SVG Vector (*.svg)",
         )
         if file_path:
-            self.chart_widget.export_image(file_path)
+            try:
+                self.chart_widget.export_image(file_path)
+            except Exception:
+                logger.exception("Failed to export comparison chart")
+                QMessageBox.warning(
+                    self, "Export failed",
+                    "Could not save the comparison chart. Check the destination and try again.",
+                )
 
     def _on_export_csv(self) -> None:
         if not self._results:
@@ -326,5 +365,11 @@ class ComparisonView(QWidget):
             "CSV Spreadsheet (*.csv)",
         )
         if file_path:
-            export_comparison_to_csv(self._results, file_path)
-
+            try:
+                export_comparison_to_csv(self._results, file_path)
+            except Exception:
+                logger.exception("Failed to export comparison CSV")
+                QMessageBox.warning(
+                    self, "Export failed",
+                    "Could not save the benchmark CSV. Check the destination and try again.",
+                )
